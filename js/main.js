@@ -65,7 +65,7 @@ function totalProductos(precio, cantidad){
 // Funcion principal del carrito
 function carrito(){
     let eleccion = parseInt(prompt('Escoja un producto de la lista:\n' + catalogoString.join('')));
-    while (eleccion < 0 || eleccion >= catalogo.length){
+    while (eleccion <= 0 || eleccion > catalogo.length){
         eleccion = parseInt(prompt('El valor escogido es incorrecto. Escoja un producto de la lista:\n' + catalogoString.join('')));
     } //Validacion del valor ingresado, debe encontrarse entre 0 y la cantidad de productos a la venta
     
