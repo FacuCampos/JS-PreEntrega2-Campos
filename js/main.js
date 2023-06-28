@@ -5,6 +5,9 @@ let precioFinal = 0;
 
 
 // CLASES
+
+//Constructor de productos que se usaria si el dueño de la 
+//tienda quisiera agregar nuevos
 class Producto{
     nombre;
     precio;
@@ -19,6 +22,7 @@ class Producto{
     }
 }
 
+// Constructor de cada item de la factura
 class ItemFactura{
     nombre;
     precio;
@@ -43,37 +47,39 @@ const producto6 = new Producto('Set de Dados', 7750, 'T&G', 'dados')
 
 
 // ARRAYS
-const catalogo = [producto1, producto2, producto3, producto4, producto5, producto6];
+const catalogo = [producto1, producto2, producto3, producto4, producto5, producto6]; // Catalogo de productos
 const catalogoString = catalogo.map((producto, index) => `
-${index +1} - ${producto.nombre}:  $${producto.precio}.`);
+${index +1} - ${producto.nombre}:  $${producto.precio}.`); // Lo convierto en un string para mostrar en prompt
 
-const arrayItems = [];
+const arrayItems = []; //Creo un array vacio que se lleará cada vez que se agregue un elemento
 
 
 
 // FUNCIONES
+// Calculo del precio total de la compra
 function totalProductos(precio, cantidad){
     precioFinal = precioFinal + precio*cantidad;
     return precioFinal;
 }
 
+// Funcion principal del carrito
 function carrito(){
     let eleccion = parseInt(prompt('Escoja un producto de la lista:\n' + catalogoString.join('')));
     while (eleccion < 0 || eleccion >= catalogo.length){
         eleccion = parseInt(prompt('El valor escogido es incorrecto. Escoja un producto de la lista:\n' + catalogoString.join('')));
-    }
+    } //Validacion del valor ingresado, debe encontrarse entre 0 y la cantidad de productos a la venta
     
     cantidad = parseInt(prompt('Introduzca la cantidad que desea llevar:'));
     while (cantidad < 0){
-        cantidad = parseInt(prompt('El valor ingresado no es válido. Introduzca la cantidad que desea llevar:'));
-    }
+        cantidad = parseInt(prompt('El valor ingresado no es válido. Introduzca la cantidad que desea llevar:')); 
+    } // Validacion del valor ingresado, tiene que ser un número positivo
     
-    subtotal = catalogo[eleccion-1].precio*cantidad;
-    const nuevoItem = new ItemFactura(catalogo[eleccion-1].nombre, catalogo[eleccion-1].precio, cantidad, subtotal);
-    arrayItems.push(nuevoItem);
-    precioFinal = precioFinal + subtotal;
+    subtotal = catalogo[eleccion-1].precio*cantidad; // Calculo del subtotal
+    const nuevoItem = new ItemFactura(catalogo[eleccion-1].nombre, catalogo[eleccion-1].precio, cantidad, subtotal); // Uso el constructor para crear un item de factura
+    arrayItems.push(nuevoItem); // Agrego el item a mi lista de items
+    precioFinal = precioFinal + subtotal; //Sumo el subtotal al precio final
 
-    let seguir = prompt('Producto agregado al carrito. ¿Desea seguir comprando? Ingrese si o no.');
+    let seguir = prompt('Producto agregado al carrito. ¿Desea seguir comprando? Ingrese si o no.'); // Doy opcion de seguir comprando
     validarInicio(seguir);
 }
 
@@ -86,8 +92,8 @@ function validarInicio(respuesta){
     if (respuesta.toLowerCase() == 'si'){
         carrito();
     }else {
-        const stringItemFactura = arrayItems.map((item, index) => (index+1)+' - Producto: '+item.nombre+' | Precio: $'+item.precio+' | Cantidad: '+item.cantidad+' | Subtotal: $'+item.subtotal);
-        alert('TICKET DE COMPRA\n\n' + stringItemFactura.join('\n\n')+ '\n\n' + 'Total a pagar = $' + precioFinal + '.');
+        const stringItemFactura = arrayItems.map((item, index) => (index+1)+' - Producto: '+item.nombre+' | Precio: $'+item.precio+' | Cantidad: '+item.cantidad+' | Subtotal: $'+item.subtotal); // Convierto arrayItems en un string para mostrar en el ticket
+        return alert('TICKET DE COMPRA\n\n' + stringItemFactura.join('\n\n')+ '\n\n' + 'Total a pagar = $' + precioFinal + '.');
     }
 }
 
