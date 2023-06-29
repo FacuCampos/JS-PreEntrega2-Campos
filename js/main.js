@@ -1,11 +1,4 @@
-// VARIABLES
-let inicio;
-let subtotal = 0;
-let precioFinal = 0;
-
-
 // CLASES
-
 //Constructor de productos que se usaria si el dueño de la 
 //tienda quisiera agregar nuevos
 class Producto{
@@ -55,10 +48,15 @@ const arrayItems = []; //Creo un array vacio que se lleará cada vez que se agre
 
 
 // FUNCIONES
-// Calculo del precio total de la compra
-function totalProductos(precio, cantidad){
-    precioFinal = precioFinal + precio*cantidad;
-    return precioFinal;
+// Calculo del subtotal y total
+function totalProductos(precio, subtot){
+    precio = precio + subtot;
+    return precio;
+}
+
+function subtotalProducto(prod, cant){
+    resultado = catalogo[prod-1].precio*cant;
+    return resultado;
 }
 
 // Funcion principal del carrito
@@ -67,20 +65,21 @@ function carrito(){
     let eleccion = validarProducto(inputeleccion);
     
     let inputCantidad = parseInt(prompt('Introduzca la cantidad que desea llevar:'));
-    cantidad = validarCantidad(inputCantidad)
+    let cantidad = validarCantidad(inputCantidad)
     
-    subtotal = catalogo[eleccion-1].precio*cantidad; // Calculo del subtotal
+    let subtotal = subtotalProducto(eleccion, cantidad);
+
     const nuevoItem = new ItemFactura(catalogo[eleccion-1].nombre, catalogo[eleccion-1].precio, cantidad, subtotal); // Uso el constructor para crear un item de factura
-    arrayItems.push(nuevoItem); // Agrego el item a mi lista de items
-    precioFinal = precioFinal + subtotal; //Sumo el subtotal al precio final
+    arrayItems.push(nuevoItem); // Agrego el item a mi lista de itemsl 
+    precioFinal = totalProductos(precioFinal, subtotal);
 
     let seguir = prompt('Producto agregado al carrito. ¿Desea seguir comprando? Ingrese si o no.'); // Doy opcion de seguir comprando
-    validarInicio(seguir);
+    validarInicio(seguir, precioFinal);
 }
 
 
 // VALIDACIONES
-function validarInicio(respuesta){
+function validarInicio(respuesta, totalAPagar){
     while (respuesta.toLowerCase() !== 'no' && respuesta.toLowerCase() !== 'si'){
         respuesta = prompt('Valor ingresado, no válido. Inténtelo nuevamente con si o no:');
     }
@@ -88,7 +87,7 @@ function validarInicio(respuesta){
         carrito();
     }else {
         const stringItemFactura = arrayItems.map((item, index) => (index+1)+' - Producto: '+item.nombre+' | Precio: $'+item.precio+' | Cantidad: '+item.cantidad+' | Subtotal: $'+item.subtotal); // Convierto arrayItems en un string para mostrar en el ticket
-        return alert('TICKET DE COMPRA\n\n' + stringItemFactura.join('\n\n')+ '\n\n' + 'Total a pagar = $' + precioFinal + '.');
+        return alert('TICKET DE COMPRA\n\n' + stringItemFactura.join('\n\n')+ '\n\n' + 'Total a pagar = $' + totalAPagar + '.');
     }
 }
 
@@ -108,5 +107,6 @@ function validarCantidad(entrada){
 
 
 //INICIO DEL PROGRAMA
-inicio = prompt('Bienvenido al seleccionador de productos. ¿Desea iniciar? Escriba si o no:');
-validarInicio(inicio);
+let precioFinal = 0
+let inicio = prompt('Bienvenido al seleccionador de productos. ¿Desea iniciar? Escriba si o no:');
+validarInicio(inicio, precioFinal);
